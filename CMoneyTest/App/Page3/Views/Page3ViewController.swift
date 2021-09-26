@@ -22,7 +22,7 @@ class Page3ViewController: UIViewController, Navigatable, Viewer {
     typealias ViewModelType = Page3ViewModel
     var viewModel: ViewModelType! {
         didSet {
-            icon.setImage(urlString: viewModel.navigationParameter.model.hdurl)
+            icon.setImage(urlString: viewModel.navigationParameter.model.hdurl, placeholder: nil)
 
             // From 2020-12-17 to 2020 Dec. 17
 

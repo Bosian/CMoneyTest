@@ -19,7 +19,7 @@ class Page2Cell: UICollectionViewCell, Viewer {
     var viewModel: ViewModelType! {
         didSet {
             titleLabel.text = viewModel.model.title
-            icon.setImage(urlString: viewModel.model.url)
+            icon.setImage(urlString: viewModel.model.url, placeholder: UIImage(named: "swiftIcon"))
             gradient.updateGradientLayer()
         }
     }
