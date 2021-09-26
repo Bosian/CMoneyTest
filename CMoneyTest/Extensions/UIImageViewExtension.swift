@@ -22,11 +22,12 @@ extension UIImageView {
         }
     }
 
-    // DispatchQueue version
-//    func setImage(urlString: String) {
+    /// DispatchQueue version
+//    func setImage(urlString: String, placeholder: UIImage?) {
 //
 //        if let cacheImage = UIImage.getImageFromCache(urlString: urlString) {
 //            self.image = cacheImage
+//            self.urlString = urlString
 //            return
 //        } else {
 //            self.image = placeholder
@@ -62,12 +63,13 @@ extension UIImageView {
 //            dataTask.resume()
 //        }
 //    }
-//
-    
-    func setImage(urlString: String) {
+
+
+    func setImage(urlString: String, placeholder: UIImage?) {
 
         if let cacheImage = UIImage.getImageFromCache(urlString: urlString) {
             self.image = cacheImage
+            self.urlString = urlString
             return
         } else {
             self.image = placeholder
@@ -91,11 +93,11 @@ extension UIImageView {
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
 
-                let image: UIImage? = data.image
-                image?.saveToCache(urlString: urlString)
-                
-                guard urlString == self.urlString else { return }
-                self.image = image
+                let newImage: UIImage? = data.image
+                newImage?.saveToCache(urlString: urlString)
+
+                guard !urlString.isEmpty, urlString == self.urlString else { return }
+                self.image = newImage
 
             } catch let error {
                 print(error.localizedDescription)
