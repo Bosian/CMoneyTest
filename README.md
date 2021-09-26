@@ -1,6 +1,8 @@
 # CMoneyTest
 
 
+Github 影片有10MB的限制，有做一些後製
+
 
 https://user-images.githubusercontent.com/9071512/134812384-3290243f-a482-4af5-a54b-def8d714e1ea.mov
 
