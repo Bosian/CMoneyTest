@@ -28,6 +28,8 @@ extension UIImageView {
 //        if let cacheImage = UIImage.getImageFromCache(urlString: urlString) {
 //            self.image = cacheImage
 //            return
+//        } else {
+//            self.image = placeholder
 //        }
 //
 //        guard !urlString.isEmpty else {
@@ -67,6 +69,8 @@ extension UIImageView {
         if let cacheImage = UIImage.getImageFromCache(urlString: urlString) {
             self.image = cacheImage
             return
+        } else {
+            self.image = placeholder
         }
 
         guard !urlString.isEmpty else {
