@@ -7,8 +7,10 @@
 
 import UIKit
 import MVVM
+import Combine
+import WebAPI
 
-class Page2ViewController: UIViewController, Viewer, Progressor {
+class Page2ViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -22,17 +24,21 @@ class Page2ViewController: UIViewController, Viewer, Progressor {
     }
     
     typealias ViewModelType = Page2ViewModel
-    var viewModel: ViewModelType! {
-        didSet {
-            showProgress(isUpdate: viewModel.isUpdate)
-            collectionView.reloadData()
-        }
-    }
+    let viewModel: ViewModelType! = ViewModelType()
+    private var cellViewModelsCancellable: AnyCancellable?
+    private var isUpdateCancellable: AnyCancellable?
+    private var modelCancelable: AnyCancellable?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel = ViewModelType(binder: self)
+        cellViewModelsCancellable = viewModel.$cellViewModels.sink { [weak self] (cellViewModels: [Page2CellViewModel]) in
+            self?.collectionView.reloadData()
+        }
+        
+        isUpdateCancellable = viewModel.$isUpdate.sink { [weak self] (isUpdate: Bool) in
+            self?.showProgress(isUpdate: isUpdate)
+        }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

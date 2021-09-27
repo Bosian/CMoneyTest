@@ -8,14 +8,12 @@
 import WebAPI
 import MVVM
 
-struct Page2ViewModel: Refreshable, Updateable, MutatingClosure {
+final class Page2ViewModel: ObservableObject, Refreshable, Updateable {
 
-    weak var binder: Binder?
+    @Published var isUpdate: Bool = false
     
-    var isUpdate: Bool = false
-    
-    private(set) var cellViewModels: [Page2CellViewModel] = []
-    private(set) var model: MainApodModel? {
+    @Published private(set) var cellViewModels: [Page2CellViewModel] = []
+    @Published private(set) var model: MainApodModel? {
         didSet {
             guard let model = model else {
                 return
@@ -25,35 +23,29 @@ struct Page2ViewModel: Refreshable, Updateable, MutatingClosure {
         }
     }
     
-    init(binder: Binder)
+    init()
     {
-        self.binder = binder
         refresh()
     }
 
-    mutating func refresh() {
+    func refresh() {
 
         isUpdate = true
 
         let parameter = MainApodParameter()
-        let copySelf = self
 
         Task { @MainActor in
             do {
                 let model: MainApodModel = try await MainApodWebAPI().invokeAsync(parameter)
                 
-                copySelf.mutating { (mutatingSelf: inout Page2ViewModel) in
-                    mutatingSelf.isUpdate = false
-                    mutatingSelf.model = model
-                }
+                isUpdate = false
+                self.model = model
                 
             } catch let error {
 
                 print(error.localizedDescription)
 
-                copySelf.mutating { (mutatingSelf: inout Page2ViewModel) in
-                    mutatingSelf.isUpdate = false
-                }
+                isUpdate = false
             }
         }
     }
